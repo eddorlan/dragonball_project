@@ -120,7 +120,11 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
+ALLOWED_HOSTS = ['*']  # En producción usa tu dominio específico
 
+# Configuración para Railway
+if 'RAILWAY_ENVIRONMENT' in os.environ:
+    DEBUG = False
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'dragonball', 'static'),
