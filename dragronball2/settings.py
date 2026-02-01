@@ -122,9 +122,10 @@ STATIC_URL = 'static/'
 
 ALLOWED_HOSTS = ['*']  # En producción usa tu dominio específico
 
-# Configuración para Railway
-if 'RAILWAY_ENVIRONMENT' in os.environ:
+if os.getenv('RAILWAY_ENVIRONMENT'):
     DEBUG = False
+else:
+    DEBUG = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'dragonball', 'static'),
