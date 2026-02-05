@@ -196,30 +196,30 @@ function showCharacterDetails(characterId) {
         `;
 
         const modalElement = document.getElementById('characterModal');
-        const modal = new bootstrap.Modal(modalElement);
+        // Obtener instancia existente o crear nueva
+        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+        
+        // Limpiar cualquier backdrop previo antes de abrir
+        const oldBackdrops = document.querySelectorAll('.modal-backdrop');
+        oldBackdrops.forEach(backdrop => backdrop.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+        
         modal.show();
 
-        // Asegurar que el modal se cierre correctamente
-        modalElement.addEventListener('hidden.bs.modal', function () {
+        // Limpiar backdrop al cerrar (FIX para móviles)
+        modalElement.addEventListener('hidden.bs.modal', function handler() {
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
             document.body.classList.remove('modal-open');
-            const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
-            }
-        }, { once: true });
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            // Remover el listener para evitar duplicados
+            modalElement.removeEventListener('hidden.bs.modal', handler);
+        });
     }
 }
-
-// Event listeners
-// Búsqueda en tiempo real mientras escribes
-document.getElementById('searchInput').addEventListener('input', searchCharacters);
-
-// Búsqueda con Enter
-document.getElementById('searchInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        searchCharacters();
-    }
-});
 
 // Inicializar
 displayCharacters();
